@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KVDB", "KVDB\KVDB.csproj", "{99A8AAD2-D28E-4495-AC4B-B3739845DE19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KVDB", "KVDB\KVDB.csproj", "{99A8AAD2-D28E-4495-AC4B-B3739845DE19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KVDB.LevelDb", "KVDB.LevelDb\KVDB.LevelDb.csproj", "{EBDDD9C5-BA34-4B92-898B-C4A83455C4D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KVDB.RocksDb", "KVDB.RocksDb\KVDB.RocksDb.csproj", "{B8B9E835-1B6B-44B4-B3AB-A8EF3F52D78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KVDB.DBreezeDb", "KVDB.DBreezeDb\KVDB.DBreezeDb.csproj", "{A619256C-B844-4616-85FA-7C3FC100C40E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{99A8AAD2-D28E-4495-AC4B-B3739845DE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A8AAD2-D28E-4495-AC4B-B3739845DE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A8AAD2-D28E-4495-AC4B-B3739845DE19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBDDD9C5-BA34-4B92-898B-C4A83455C4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBDDD9C5-BA34-4B92-898B-C4A83455C4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBDDD9C5-BA34-4B92-898B-C4A83455C4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBDDD9C5-BA34-4B92-898B-C4A83455C4D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B9E835-1B6B-44B4-B3AB-A8EF3F52D78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B9E835-1B6B-44B4-B3AB-A8EF3F52D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B9E835-1B6B-44B4-B3AB-A8EF3F52D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B9E835-1B6B-44B4-B3AB-A8EF3F52D78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A619256C-B844-4616-85FA-7C3FC100C40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A619256C-B844-4616-85FA-7C3FC100C40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A619256C-B844-4616-85FA-7C3FC100C40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A619256C-B844-4616-85FA-7C3FC100C40E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

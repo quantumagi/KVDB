@@ -21,14 +21,14 @@
         /// <param name="table">The table identifier.</param>
         /// <param name="key">The key of the value to retrieve.</param>
         /// <returns>The value for the specified table and key.</returns>
-        byte[] Get(byte table, byte[] key);
+        byte[]? Get(byte table, byte[] key);
 
         /// <summary>
         /// Gets the value associated with a key.
         /// </summary>
         /// <param name="key">The key of the value to retrieve.</param>
         /// <returns>The value for the specified key.</returns>
-        byte[] Get(byte[] key);
+        byte[]? Get(byte[] key);
 
         /// <summary>
         /// Gets an iterator that allows iteration over keys in a table.

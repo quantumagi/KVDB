@@ -4,25 +4,26 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<PackageId>KVDB</PackageId>
+	<PackageId>KVDB.RocksDb</PackageId>
 	<Version>1.0.0</Version>
 	<Authors>Gustav Stieger</Authors>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<Description>Used in conjunction with database add-ins (KVDB.LevelDb, KVDB.RocksDb or KVDB.DBreezeDb) for standardized KV-store access.</Description>
+	<Description>Used in conjunction with KVDB for standardized KV-store access.</Description>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageIcon>images\icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-	<None Include="README.md" Pack="true" PackagePath="" />
-	<None Include="images\icon.png" Pack="true" PackagePath="images\" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="images\icon.png" Pack="true" PackagePath="images\" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="RocksDB" Version="8.5.3.42578" />
   </ItemGroup>
 
-
-	<ItemGroup>
-    <Compile Remove="DBreezeDb.cs" />
-    <Compile Remove="LevelDb.cs" />
-    <Compile Remove="RocksDb.cs" />
+  <ItemGroup>
+    <ProjectReference Include="..\KVDB\KVDB.csproj" />
   </ItemGroup>
 
 </Project>

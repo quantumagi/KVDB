@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<PackageId>KVDB.DBreezeDb</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>Gustav Stieger</Authors>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Description>Used in conjunction with KVDB for standardized KV-store access.</Description>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageIcon>images\icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <None Include="README.md" Pack="true" PackagePath="" />
+	  <None Include="images\icon.png" Pack="true" PackagePath="images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DBreeze" Version="1.108.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KVDB\KVDB.csproj" />
+  </ItemGroup>
+
+</Project>
