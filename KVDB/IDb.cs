@@ -66,23 +66,6 @@
         /// <summary>
         /// Records a value that will be written to the database when the <see cref="Write"/> method is invoked.
         /// </summary>
-        /// <param name="table">The table that will be updated.</param>
-        /// <param name="key">The table key that identifies the value to be updated.</param>
-        /// <param name="value">The value to be written to the table.</param>
-        /// <returns>This class for fluent operations.</returns>
-        IDbBatch Put(byte table, byte[] key, byte[] value);
-
-        /// <summary>
-        /// Records a key that will be deleted from the database when the <see cref="Write"/> method is invoked.
-        /// </summary>
-        /// <param name="table">The table that will be updated.</param>
-        /// <param name="key">The table key that will be removed.</param>
-        /// <returns>This class for fluent operations.</returns>
-        IDbBatch Delete(byte table, byte[] key);
-
-        /// <summary>
-        /// Records a value that will be written to the database when the <see cref="Write"/> method is invoked.
-        /// </summary>
         /// <param name="key">The table key that identifies the value to be updated.</param>
         /// <param name="value">The value to be written to the table.</param>
         /// <returns>This class for fluent operations.</returns>

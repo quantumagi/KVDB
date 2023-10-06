@@ -3,7 +3,7 @@
 namespace KVDB.LevelDb
 {
     /// <summary>A minimal LevelDb wrapper that makes it compliant with the <see cref="IDb"/> interface.</summary>
-    public class LevelDb : IDb
+    public class LevelDb : Db
     {
         private string dbPath;
 
@@ -14,17 +14,12 @@ namespace KVDB.LevelDb
             this.dbPath = string.Empty;
         }
 
-        public IDbIterator GetIterator(byte table)
-        {
-            return new LevelDbIterator(table, Db().CreateIterator());
-        }
-
-        public IDbIterator GetIterator()
+        public override IDbIterator GetIterator()
         {
             return new LevelDbIterator(Db().CreateIterator());
         }
 
-        public void Open(string dbPath)
+        public override void Open(string dbPath)
         {
             this.dbPath = dbPath;
             this.db = new DB(new Options() { CreateIfMissing = true }, dbPath);
@@ -38,7 +33,7 @@ namespace KVDB.LevelDb
             return this.db;
         }
 
-        public void Clear()
+        public override void Clear()
         {
             this.db = Db();
             this.db.Dispose();
@@ -46,19 +41,14 @@ namespace KVDB.LevelDb
             this.db = new DB(new Options() { CreateIfMissing = true }, this.dbPath);
         }
 
-        public IDbBatch GetWriteBatch(params byte[] tables) => new LevelDbBatch(Db());
+        public override IDbBatch GetWriteBatch(params byte[] tables) => new LevelDbBatch(Db());
 
-        public byte[] Get(byte table, byte[] key)
-        {
-            return Db().Get(new[] { table }.Concat(key).ToArray());
-        }
-
-        public byte[] Get(byte[] key)
+        public override byte[] Get(byte[] key)
         {
             return Db().Get(key);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.db != null)
             {
@@ -77,20 +67,6 @@ namespace KVDB.LevelDb
         {
             this.db = db;
         }
-
-        // Methods when using tables.
-
-        public IDbBatch Put(byte table, byte[] key, byte[] value)
-        {
-            return this.Put(new[] { table }.Concat(key).ToArray(), value);
-        }
-
-        public IDbBatch Delete(byte table, byte[] key)
-        {
-            return this.Delete(new[] { table }.Concat(key).ToArray());
-        }
-
-        // Table-less operations.
 
         public new IDbBatch Put(byte[] key, byte[] value)
         {
@@ -113,14 +89,7 @@ namespace KVDB.LevelDb
     /// <summary>A minimal LevelDb wrapper that makes it compliant with the <see cref="IDbIterator"/> interface.</summary>
     public class LevelDbIterator : IDbIterator
     {
-        private byte? table;
         private Iterator iterator;
-
-        public LevelDbIterator(byte table, Iterator iterator)
-        {
-            this.table = table;
-            this.iterator = iterator;
-        }
 
         // Table-less constructor.
         public LevelDbIterator(Iterator iterator)
@@ -128,60 +97,19 @@ namespace KVDB.LevelDb
             this.iterator = iterator;
         }
 
-        public void Seek(byte[] key)
-        {
-            this.iterator.Seek(this.table.HasValue ? (new[] { this.table.Value }.Concat(key).ToArray()) : key);
-        }
+        public void Seek(byte[] key) => this.iterator.Seek(key);
 
-        public void SeekToLast()
-        {
-            if (!this.table.HasValue)
-            {
-                this.iterator.SeekToLast();
-                return;
-            }
+        public void SeekToLast() => this.iterator.SeekToLast();
 
-            if (this.table != 255)
-            {
-                // First seek past the last record in the table by attempting to seek to the start of the next table (if any).
-                this.iterator.Seek(new[] { (byte)(this.table + 1) });
+        public void Next() => this.iterator.Next();
 
-                // If we managed to seek to the start of the next table then go back one record to arrive at the last record of 'table'.
-                if (this.iterator.IsValid())
-                {
-                    this.iterator.Prev();
-                    return;
-                }
-            }
+        public void Prev() => this.iterator.Prev();
 
-            // If there is no next table then simply seek to the last record in the db as that will be the last record of 'table'.
-            this.iterator.SeekToLast();
-        }
+        public bool IsValid() => this.iterator.IsValid();
 
-        public void Next()
-        {
-            this.iterator.Next();
-        }
+        public byte[] Key() => this.iterator.Key();
 
-        public void Prev()
-        {
-            this.iterator.Prev();
-        }
-
-        public bool IsValid()
-        {
-            return this.iterator.IsValid() && (!this.table.HasValue || this.iterator.Key()[0] == this.table);
-        }
-
-        public byte[] Key()
-        {
-            return this.table.HasValue ? this.iterator.Key().Skip(1).ToArray() : this.iterator.Key();
-        }
-
-        public byte[] Value()
-        {
-            return this.iterator.Value();
-        }
+        public byte[] Value() => this.iterator.Value();
 
         public void Dispose()
         {

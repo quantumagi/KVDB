@@ -25,7 +25,7 @@ namespace Stratis.Bitcoin.Database
     }
 
     /// <summary>A minimal DBreeze wrapper that makes it compliant with the <see cref="IDb"/> interface.</summary>
-    public class DBreezeDb : IDb
+    public class DBreezeDb : Db
     {
         private Dictionary<int, Transaction> transactions = new Dictionary<int, Transaction>();
 
@@ -49,12 +49,12 @@ namespace Stratis.Bitcoin.Database
             return this.db;
         }
 
-        public IDbIterator GetIterator(byte table)
+        public override IDbIterator GetIterator(byte table)
         {
             return new DBreezeIterator(this, this.tableNames[table]);
         }
 
-        public IDbIterator GetIterator()
+        public override IDbIterator GetIterator()
         {
             return new DBreezeIterator(this, "default");
         }
@@ -64,13 +64,13 @@ namespace Stratis.Bitcoin.Database
             return this.tableNames[table];
         }
 
-        public void Open(string dbPath)
+        public override void Open(string dbPath)
         {
             this.dbPath = dbPath;
             this.db = new DBreezeEngine(dbPath);
         }
 
-        public void Clear()
+        public override void Clear()
         {
             this.db = Db();
             this.db.Dispose();
@@ -78,7 +78,7 @@ namespace Stratis.Bitcoin.Database
             this.db = new DBreezeEngine(this.dbPath);
         }
 
-        public IDbBatch GetWriteBatch(params byte[] tables) => new DBreezeBatch(this, tables);
+        public override IDbBatch GetWriteBatch(params byte[] tables) => new DBreezeBatch(this, tables);
 
         private (Transaction transaction, bool canDispose) GetTransaction()
         {
@@ -119,7 +119,7 @@ namespace Stratis.Bitcoin.Database
             }
         }
 
-        public byte[]? Get(byte[] key)
+        public override byte[]? Get(byte[] key)
         {
             using (BatchContext ctx = this.GetBatchContext())
             {
@@ -127,7 +127,7 @@ namespace Stratis.Bitcoin.Database
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.db != null)
             {
@@ -137,7 +137,7 @@ namespace Stratis.Bitcoin.Database
         }
     }
 
-    /// <summary>A minimal LevelDb wrapper that makes it compliant with the <see cref="IDbBatch"/> interface.</summary>
+    /// <summary>A minimal DBreezeDb wrapper that makes it compliant with the <see cref="IDbBatch"/> interface.</summary>
     public class DBreezeBatch : IDbBatch
     {
         private DBreezeDb db;
@@ -150,7 +150,6 @@ namespace Stratis.Bitcoin.Database
         }
 
         // Methods when using tables.
-
         public IDbBatch Put(byte table, byte[] key, byte[] value)
         {
             this.context.transaction.Insert(this.db.GetTableName(table), key, value);
@@ -188,7 +187,7 @@ namespace Stratis.Bitcoin.Database
         }
     }
 
-    /// <summary>A minimal LevelDb wrapper that makes it compliant with the <see cref="IDbIterator"/> interface.</summary>
+    /// <summary>A minimal DBreezeDb wrapper that makes it compliant with the <see cref="IDbIterator"/> interface.</summary>
     public class DBreezeIterator : IDbIterator
     {
         private BatchContext context;
@@ -221,24 +220,12 @@ namespace Stratis.Bitcoin.Database
             this.current = this.context.transaction.SelectBackwardStartFrom<byte[], byte[]>(this.tableName, this.current!.Key, includeStartFromKey: false, AsReadVisibilityScope: true).FirstOrDefault();
         }
 
-        public bool IsValid()
-        {
-            return this.current?.Exists ?? false;
-        }
+        public bool IsValid() => this.current?.Exists ?? false;
 
-        public byte[] Key()
-        {
-            return this.current!.Key;
-        }
+        public byte[] Key() => this.current!.Key;
 
-        public byte[] Value()
-        {
-            return this.current!.Value;
-        }
+        public byte[] Value() => this.current!.Value;
 
-        public void Dispose()
-        {
-            this.context.Dispose();
-        }
+        public void Dispose() => this.context.Dispose();
     }
 }
